@@ -26,7 +26,7 @@ The node will need access to the following external hosts:
 * `http://developer.apple.com` - To download developer certificates and Xcode.
 * `https://npmjs.org` - To install NPM packages.
 
-***Note: Other external hosts may be required depending on what other packages you specify to install.***
+***Note: Other external hosts may be required depending on what other packages you specify to install from Homebrew etc.***
 
 ## Install Homebrew
 Installs Homebrew on the node.
@@ -35,7 +35,8 @@ This will also add any taps and packages specified in the options.
 
 To run this section as a standalone step you must specify the `osx_install_homebrew` tag.
 
-### Options
+### Variables
+All of these variables are optional and will install required packages by default.
 * `homebrew_version` - The version of Homebrew to install (git tag).
 * `homebrew_packages` - The packages to install using Homebrew. Format: `{ name: <PACKAGE_NAME> }`.
 * `homebrew_repo` - The git repo where Homebrew resides (defaults to GitHub repo).
@@ -51,7 +52,8 @@ other gems can be specified using the `gem_packages` variable.
 
 To run this section as a standalone step you must specify the `osx_install_ruby` tag.
 
-### Options
+### Variables
+All of these variables are optional and will install required packages by default.
 * `rvm_install_url` - The URL of RVM installation script (defaults to GitHub release).
 * `rvm_install_file_name` - What to name the file on the node.
 * `rvm_gpg_url` - The URL of the RVM prerequisite gpg key.
@@ -66,7 +68,8 @@ Packages from NPM can be defined also, however they will be installed globally.
 
 To run this section as a standalone step you must specify the `osx_install_nodejs` tag.
 
-### Options
+### Variables
+All of these variables are optional and will install required packages by default.
 * `nvm_install_url` - The URL of NVM installation script (defaults to GitHub release).
 * `nvm_install_file_name` - What to name the file on the node.
 * `node_versions` - A list of Node versions to install.
@@ -80,8 +83,6 @@ be patient during these stages.
 If you have 2FA enabled for the Apple Developer Account you're specifying then
 you will need to set the `xcode_install_session_token` option to a cookie provided
 by authenticating with Apple. This can be done using `Fastlane Spaceship`.
-
-To run this section as a standalone step you must specify the `osx_install_xcode` tag.
 
 ***Note: Installed fastlane version must be >= 2.42.0***
 
@@ -98,11 +99,17 @@ the value for `xcode_install_session_token`.
 Alternatively disable 2FA on the Apple Developer Account for the duration of the
 Ansible job.
 
-### Options
+To run this section as a standalone step you must specify the `osx_install_xcode` tag.
+
+### Variables
+#### Required
+If these options are not set then Xcode installation will be skipped.
 * `xcode_install_user` - Apple Developer Account username. If this is not set then Xcode will not be installed.
 * `xcode_install_password` - Apple Developer Account password. If this is not set then Xcode will not be installed.
-* `xcode_install_session_token` - Apple Developer Account auth cookie from `fastlane spaceauth` command (For accounts with 2FA enabled).
 * `xcode_versions` - A list of Xcode versions to install. These may take over 30 minutes each to install.
+
+#### Optional
+* `xcode_install_session_token` - Apple Developer Account auth cookie from `fastlane spaceauth` command (For accounts with 2FA enabled).
 
 ## Download certs
 Downloads some required certificates into the node. Right now, the only required certificate is Apple's WWDR certificate.
@@ -111,6 +118,7 @@ This certificate will be downloaded into the user's home directory.
 To run this section as a standalone step you must specify the `osx_download_certs` tag.
 
 ### Options:
+All of these variables are optional and will install required packages by default.
 * `apple_wwdr_cert_url` - Apple WWDR certificate URL. Defaults to Apple's official URL
 * `apple_wwdr_cert_file_name` - Output file name of the downloaded file. Defaults to `AppleWWDRCA.cer`.
 
@@ -126,10 +134,13 @@ You will need to create a key pair using a tool such as `ssh-keygen` to allow th
 
 To run this section as a standalone step you must specify the `osx_configure_buildfarm` tag.
 
-### Options
-* `credential_private_key_path` - Location of the private key of the pair. This is stored in Jenkins and used to SSH into the macOS node. If this is not set then this section will be skipped.
-* `credential_passphrase` - Passphrase of the private key. This is stored in Jenkins and used to SSH into the macOS node. If this is not set then this section will be skipped.
-* `credential_public_key_path` - Location of the public key of the pair. If this is not set then this section will be skipped.
+### Variables
+#### Required
+If required options are not set then the build farm then the configuration of the Jenkins node will be skipped.
+* `credential_private_key_path` - Location of the private key of the pair. This is stored in Jenkins and used to SSH into the macOS node. 
+* `credential_passphrase` - Passphrase of the private key. This is stored in Jenkins and used to SSH into the macOS node. 
+* `credential_public_key_path` - Location of the public key of the pair.
+#### Optional
 * `buildfarm_node_port` - The port to connect to the macOS node on. Defaults to `22`.
 * `buildfarm_node_root_dir` - Root node of the node in Jenkins. Defaults to `/Users/jenkins`.
 * `buildfarm_credential_id` - Identifier for the Jenkins credential object. Defaults to `macOS_buildfarm_cred`.
@@ -143,6 +154,6 @@ To run this section as a standalone step you must specify the `osx_configure_bui
   - `EXCLUSIVE` - Only build jobs with labels matching this node.
 * `buildfarm_node_description` - Description of the macOS node in Jenkins.
 
-## Other options
-* `remote_tmp_dir` - A directory where downloaded scripts and other miscellaneous files can be stored for the duration of the job.
+## Other variables
+* `remote_tmp_dir` - A directory where downloaded scripts and other miscellaneous files can be stored for the duration of the job. Defaults to `/tmp`.
 * `project_name` - Name of the Jenkins project in OpenShift. Defaults to `jenkins`.
