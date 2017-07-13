@@ -19,4 +19,4 @@
   tags: osx_pod_repo_update
 
 - include: configure_buildfarm_node.yml
-  tags: osx_configure_buildfarm
+  tags: osx_configure_jenkins

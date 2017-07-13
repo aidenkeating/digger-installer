@@ -1,6 +1,6 @@
 # Provision OSX role
 
-Provision Jenkins node for the build farm. This role performs a few tasks, these are:
+Provision Jenkins node for Digger. This role performs a few tasks, these are:
 
 * [Install Homebrew](#prerequisites)
 * [Install RVM and Ruby](#install-homebrew)
@@ -8,7 +8,7 @@ Provision Jenkins node for the build farm. This role performs a few tasks, these
 * [Install Xcode](#install-xcode)
 * [Download certs](#download-certs)
 * [Update Cocoapods](#update-cocoapods)
-* [Configure Buildfarm node](#configure-buildfarm-node)
+* [Configure Jenkins node](#configure-jenkins-node)
 
 ## Prerequisites
 * SSH access as a user with sudo permissions.
@@ -127,16 +127,16 @@ Executes `pod repo update`.
 
 To run this section as a standalone step you must specify the `osx_pod_repo_update` tag.
 
-## Configure Buildfarm node
-Creates a credential set in the build farm for the macOS nodes using the provided keys. Add each machine as a node in the build farm, connecting through SSH.
+## Configure Jenkins node
+Creates a credential set in Digger for the macOS nodes using the provided keys. Add each machine as a node in Jenkins, connecting through SSH.
 
 You will need to create a key pair using a tool such as `ssh-keygen` to allow the Jenkins instance to connect with the macOS nodes.
 
-To run this section as a standalone step you must specify the `osx_configure_buildfarm` tag.
+To run this section as a standalone step you must specify the `osx_configure_jenkins` tag.
 
 ### Variables
 #### Required
-If required options are not set then the build farm then the configuration of the Jenkins node will be skipped.
+If required options are not set then Digger then the configuration of the Jenkins node will be skipped.
 * `credential_private_key_path` - Location of the private key of the pair. This is stored in Jenkins and used to SSH into the macOS node. 
 * `credential_passphrase` - Passphrase of the private key. This is stored in Jenkins and used to SSH into the macOS node. 
 * `credential_public_key_path` - Location of the public key of the pair.
